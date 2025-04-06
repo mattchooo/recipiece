@@ -106,7 +106,7 @@ sorted_matches = sorted(
     reverse=True
 )
 
-print("Recipes you can make with your current ingredients:")
+print("\nRecipes you can make with your current ingredients:\n")
 for meal_id, data in sorted_matches[:10]:
     recipe = data["details"]
     if recipe:
