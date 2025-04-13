@@ -1,6 +1,7 @@
 import sys
 import os
 import requests
+import json
 from functools import lru_cache
 from collections import defaultdict
 from clarifai_grpc.channel.clarifai_channel import ClarifaiChannel
@@ -27,7 +28,7 @@ def fetch_recipe_details(meal_id):
     return data["meals"][0] if data["meals"] else None
 
 if len(sys.argv) != 2:
-    print("Usage: python predict-food-items.py <user_id>")
+    sys.stderr.write("Usage: python predict-food-items.py <user_id>")
     sys.exit(1)
     
 user_id = sys.argv[1]
@@ -42,7 +43,7 @@ for ext in supported_extensions:
         break
 
 if not image_path:
-    print(f"No image file found for user ID '{user_id}' with supported extensions {supported_extensions}.")
+    sys.stderr.write(f"No image file found for user ID '{user_id}' with supported extensions {supported_extensions}.")
     sys.exit(1)
 
 with open(image_path, "rb") as image_file:
@@ -71,8 +72,8 @@ post_workflow_results_response = stub.PostWorkflowResults(
 )
 
 if post_workflow_results_response.status.code != status_code_pb2.SUCCESS:
-    print(post_workflow_results_response.status)
-    raise Exception("Post workflow results failed, status: " + post_workflow_results_response.status.description)
+    sys.stderr.write("Post workflow results failed, status: " + post_workflow_results_response.status + "\nDescription: " + post_workflow_results_response.status.description)
+    sys.exit(1)
 
 results = post_workflow_results_response.results[0]
 
@@ -88,7 +89,7 @@ predicted_ingredients = [
     for concept in output.data.concepts
 ]
 
-print(f"Detected fridge ingredients: {predicted_ingredients}")
+# print(f"Detected fridge ingredients: {predicted_ingredients}")
 
 recipe_match_count = defaultdict(lambda: {"count": 0, "details": None})
 
@@ -106,7 +107,9 @@ sorted_matches = sorted(
     reverse=True
 )
 
-print("\nRecipes you can make with your current ingredients:\n")
+recipes = []
+
+# print("\nRecipes you can make with your current ingredients:\n")
 for meal_id, data in sorted_matches[:10]:
     recipe = data["details"]
     if recipe:
@@ -117,8 +120,20 @@ for meal_id, data in sorted_matches[:10]:
             if recipe[f"strIngredient{i}"]
         ]
         match_percent = matched_count / len(ingredients) if ingredients else 0
-        print(f"{recipe['strMeal']} ({match_percent:.0%} match)")
-        print(f"Ingredients: {', '.join(ingredients)}")
-        print(f"Instructions: {recipe['strInstructions'][:150]}...")
-        print(f"Link: {recipe['strSource'] or 'https://www.themealdb.com/meal.php?c=' + meal_id}")
-        print("\n")
+        recipes.append({
+            "id": meal_id,
+            "name": recipe["strMeal"],
+            "matchPercent": round(match_percent * 100),
+            "ingredients": ingredients,
+            "instructions": recipe["strInstructions"],
+            "source": recipe["strSource"] or f"https://www.themealdb.com/meal.php?c={meal_id}",
+            "thumbnail": recipe["strMealThumb"]
+        })
+
+        # print(f"{recipe['strMeal']} ({match_percent:.0%} match)")
+        # print(f"Ingredients: {', '.join(ingredients)}")
+        # print(f"Instructions: {recipe['strInstructions'][:150]}...")
+        # print(f"Link: {recipe['strSource'] or 'https://www.themealdb.com/meal.php?c=' + meal_id}")
+        # print("\n")
+        
+print(json.dumps(recipes))
