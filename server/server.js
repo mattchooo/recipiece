@@ -14,8 +14,22 @@ const app = express();
 const appRoutes = require('./routes/appRoutes');
 const announcementRoutes = require('./routes/announcementRoutes');
 
+<<<<<<< Updated upstream
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+=======
+require('./config/passport')(passport);
+require('dotenv').config();
+
+const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(cors({
+  origin: 'http://localhost:3000',
+  credentials: true
+}));
+>>>>>>> Stashed changes
 
 // Express session initialization:
 app.use(session({
@@ -54,6 +68,7 @@ app.listen(5000, () => {
   console.log("Server started on port 5000");
 });
 
+<<<<<<< Updated upstream
 User.sync().then((data) => {
   console.log("User table and model successfully synced!");
 }).catch((err) => {
@@ -65,5 +80,14 @@ Announcement.sync().then((data) => {
 }).catch((err) => {
   console.log("Error syncing the announcement table and model.");
 })
+=======
+User.sync({ alter: true })
+  .then(() => console.log("User model updated with latest schema."))
+  .catch(err => console.log("User sync error:", err));
+
+Announcement.sync({ alter: true })
+  .then(() => console.log("Announcement model updated with latest schema."))
+  .catch(err => console.log("Announcement sync error:", err));
+>>>>>>> Stashed changes
 
 

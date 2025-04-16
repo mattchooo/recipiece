@@ -1,1 +1,8 @@
+<<<<<<< Updated upstream
 node_modules/
+=======
+unused/
+node_modules/
+.env
+
+>>>>>>> Stashed changes

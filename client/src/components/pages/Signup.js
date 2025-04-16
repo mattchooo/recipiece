@@ -12,6 +12,8 @@ function Signup() {
     password: ''
   });
 
+  const [signupError, setSignupError] = useState('');
+
   const handleChange = (e) => {
     setFormData(prev => ({
       ...prev,
@@ -21,6 +23,7 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSignupError(''); 
   
     try {
       const response = await fetch('http://localhost:5000/create', {
@@ -32,11 +35,16 @@ function Signup() {
       });
   
       const result = await response.json();
-      console.log('Response from backend:', result); 
   
-      navigate('/login');
+      if (response.ok) {
+        console.log('Signup success:', result);
+        navigate('/login');
+      } else {
+        setSignupError(result.error || 'Signup failed');
+      }
     } catch (error) {
       console.error('Error during signup:', error);
+      setSignupError('Network error during signup');
     }
   };
 
@@ -44,6 +52,7 @@ function Signup() {
     <div>
       <div className="signup-page">
         <h1>Create an Account</h1>
+        {signupError && <h2>{signupError}</h2>}
         <form className="signup-form" onSubmit={handleSubmit}>
         <input
             type="text"

@@ -17,8 +17,16 @@ const authenticateMiddleware = passport.authenticate('local', {
   failureFlash: true
 });
 
-router.post('/validate', authenticateMiddleware, (req, res) => {
-  res.status(200).json({ message: 'Login successful.' });
+router.post('/validate', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) return res.status(500).json({ error: 'Server error during authentication' });
+    if (!user) return res.status(401).json({ error: info.message });
+
+    req.logIn(user, (err) => {
+      if (err) return res.status(500).json({ error: 'Login failed' });
+      return res.status(200).json({ message: 'Login successful', user });
+    });
+  })(req, res, next);
 });
 
 router.post('/clearUserTable', appController.clearUserTable);
@@ -27,7 +35,6 @@ router.post('/clearUserTable', appController.clearUserTable);
 router.get('/login', (req, res) => {
   const errorMessage = req.flash('error');
   res.send({ message: errorMessage[0] });
-  // handle server error messages eventually
 });
 
 router.get('/', (req, res) => {

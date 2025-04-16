@@ -24,6 +24,7 @@ function authenticate(passport) {
 
                     if (isMatch) {
                         console.log('Password matched.');
+                        //console.log("Loaded API Key:", process.env.SENDGRID_API_KEY?.slice(0, 10));
                         return done(null, user);
                     } else {
                         console.log('Incorrect password.');

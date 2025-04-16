@@ -10,6 +10,8 @@ import Login from './components/pages/Login';
 import Upload from './components/pages/Upload';
 import ForgotPassword from './components/pages/ForgotPassword';
 import Cheeseburger from './components/pages/Cheeseburger';
+import FridgeConfirmation from './components/pages/FridgeConfirmation';
+import ForgotPasswordRedirect from './components/pages/ForgotPasswordRedirect';
 
 
 function App() {
@@ -27,6 +29,8 @@ function App() {
         <Route path='/upload' Component={Upload} />
         <Route path='/cheeseburger' Component={Cheeseburger} />
         <Route path='/forgot-password' Component={ForgotPassword} />
+        <Route path='/fridge-confirmation' Component={FridgeConfirmation} />
+        <Route path='/reset-password/:token/:id' Component={ForgotPasswordRedirect} />
       </Routes>
       </Router>
     </div>

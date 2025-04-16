@@ -7,6 +7,7 @@ import './Signup.css';
 function Login() {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
+  const [loginError, setLoginError] = useState('');
 
   const [loginData, setLoginData] = useState({
     email: '',
@@ -22,7 +23,7 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     try {
       const response = await fetch('http://localhost:5000/validate', {
         method: 'POST',
@@ -30,17 +31,19 @@ function Login() {
         body: JSON.stringify(loginData),
         credentials: 'include',
       });
-
+  
+      const result = await response.json();
+  
       if (response.ok) {
-        const result = await response.json();
         console.log('Login success:', result);
         login(loginData);
         navigate('/');
       } else {
-        alert('Invalid credentials');
+        setLoginError(result.error || 'Login failed');
       }
     } catch (err) {
       console.error('Login error:', err);
+      setLoginError('Network error. Please try again later.');
     }
   };
 
@@ -48,6 +51,7 @@ function Login() {
     <div>
       <div className="signup-page">
         <h1>Log In</h1>
+        {loginError && <h2>{loginError}</h2>}
         <form className="signup-form" onSubmit={handleSubmit}>
           <input
             type="email"
