@@ -1,25 +1,29 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import './Card.css';
+import './pages/Confirm.css'; 
 
-function Card(props) {
+function Card({ recipe, isSelected, onSelect, onClick }) {
+  if (!recipe) return null;
+
   return (
-    <>
-      <li className='cards__item'>
-        <Link className='cards__item__link' to={props.path}>
-          <figure className='cards__item__pic-wrap'>
-            <img
-              className='cards__item__img'
-              alt='Food Image'
-              src={props.src}
-            />
-          </figure>
-          <div className='cards__item__info'>
-            <h5 className='cards__item__text'>{props.text}</h5>
-          </div>
-        </Link>
-      </li>
-    </>
+    <div className="recipe-card-link">
+      <div
+        className={`recipe-card ${isSelected ? 'selected' : ''}`}
+        onClick={onClick}
+      >
+        <img src={recipe.thumbnail} alt={recipe.name} />
+        <h3>{recipe.name}</h3>
+        {onSelect && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect(recipe.id);
+            }}
+          >
+            {isSelected ? 'Selected' : 'Select'}
+          </button>
+        )}
+      </div>
+    </div>
   );
 }
 

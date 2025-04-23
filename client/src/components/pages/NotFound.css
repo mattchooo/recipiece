@@ -1,0 +1,25 @@
+.not-found-page {
+    padding: 4rem;
+    text-align: center;
+    background-color: #2c234d;
+    color: white;
+    min-height: 100vh;
+}
+
+.not-found-page h1 {
+    font-size: 6rem;
+    margin-bottom: 1rem;
+}
+
+.not-found-page h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.back-home {
+    color: #a284da;
+    text-decoration: underline;
+    font-size: 1.2rem;
+    display: inline-block;
+    margin-top: 2rem;
+}

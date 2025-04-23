@@ -10,29 +10,65 @@ import Login from './components/pages/Login';
 import Upload from './components/pages/Upload';
 import ForgotPassword from './components/pages/ForgotPassword';
 import Cheeseburger from './components/pages/Cheeseburger';
-import FridgeConfirmation from './components/pages/FridgeConfirmation';
+import Recipe from './components/pages/Recipe';
+import Confirm from './components/pages/Confirm';
 import ForgotPasswordRedirect from './components/pages/ForgotPasswordRedirect';
-
+import { AuthProvider } from './components/AuthContext';
+import ProtectedRoute from './components/ProtectedRoute';
+import NotFound from './components/pages/NotFound';
 
 function App() {
   return (
     <div className="App">
-      <Router>
-      <Navbar />
-      <Routes>
-        <Route path='/' exact Component={Home} />
-        <Route path='/search' Component={Search} />
-        <Route path='/sign-up' Component={Signup} />
-        <Route path='/login' Component={Login} />
-        <Route path='/about' Component={About} />
-        <Route path='/recipes' Component={Recipes} />
-        <Route path='/upload' Component={Upload} />
-        <Route path='/cheeseburger' Component={Cheeseburger} />
-        <Route path='/forgot-password' Component={ForgotPassword} />
-        <Route path='/fridge-confirmation' Component={FridgeConfirmation} />
-        <Route path='/reset-password/:token/:id' Component={ForgotPasswordRedirect} />
-      </Routes>
-      </Router>
+      <AuthProvider>
+        <Router>
+          <Navbar />
+          <Routes>
+            <Route path='/' element={<Home />} />
+            <Route path='/search' element={<Search />} />
+            <Route path='/sign-up' element={<Signup />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/about' element={<About />} />
+            
+            <Route
+              path='/recipes'
+              element={
+                <ProtectedRoute>
+                  <Recipes />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/upload'
+              element={
+                <ProtectedRoute>
+                  <Upload />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/confirm'
+              element={
+                <ProtectedRoute>
+                  <Confirm />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path='/recipes/meal/:mealId'
+              element={
+                <ProtectedRoute>
+                  <Recipe />
+                </ProtectedRoute>
+              }
+            />
+            <Route path='/cheeseburger' element={<Cheeseburger />} />
+            <Route path='/forgot-password' element={<ForgotPassword />} />
+            <Route path='/reset-password/:token/:id' element={<ForgotPasswordRedirect />} />
+            <Route path='*' element={<NotFound />} />
+          </Routes>
+        </Router>
+      </AuthProvider>
     </div>
   );
 }

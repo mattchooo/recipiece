@@ -1,13 +1,17 @@
 .recipes-page {
-    background-color: #2C2842;
-    min-height: 100vh;
-    color: white;
-    text-align: center;
-    padding-top: 4rem;
-  }
-  
-  .recipes-page > h1 {
-    font-size: 3rem;
-    font-family: 'Jua', sans-serif;
-  }
-  
+  padding: 2rem;
+  background-color: #2c234d;
+  color: #fff;
+  min-height: 80vh;
+  text-align: center;
+}
+
+.recipe-grid {
+  margin-top: 2rem;
+  margin-bottom: 4rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  justify-content: center;
+  align-items: stretch;
+}

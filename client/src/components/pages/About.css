@@ -1,0 +1,21 @@
+.about-page {
+    padding: 4rem 2rem;
+    background-color: #2c234d;
+    color: white;
+    min-height: 100vh;
+    text-align: center;
+  }
+  
+  .about-title {
+    font-size: 3rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .about-description {
+    max-width: 800px;
+    margin: 0 auto 1.5rem auto;
+    font-size: 1.2rem;
+    line-height: 1.6;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  }
+  

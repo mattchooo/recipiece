@@ -1,11 +1,16 @@
 import React, { useContext } from 'react';
 import { Button } from './Button';
 import { AuthContext } from './AuthContext';
+import { useEffect } from 'react';
 import './Hero.css';
 import '../App.css';
 
 function Hero() {
     const { user, isAuthenticated, loading } = useContext(AuthContext);
+
+    useEffect(() => {
+        document.title = "Recipiece";
+      }, []);
 
     return (
         <div className='hero-container'>
